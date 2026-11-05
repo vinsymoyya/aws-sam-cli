@@ -1,0 +1,22 @@
+name: Contribution validation
+on:
+  push:
+    branches: [validation/9401]
+permissions:
+  contents: read
+jobs:
+  make-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      UV_PYTHON: '3.11'
+      SAM_CLI_TELEMETRY: '0'
+      AWS_EC2_METADATA_DISABLED: 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        with:
+          python-version: '3.11'
+          cache-python: false
+      - run: bash tests/setup-python-uv.sh 3.11
+      - run: make pr
